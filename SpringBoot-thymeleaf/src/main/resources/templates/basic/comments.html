@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Comments</title>
+</head>
+<body>
+	<h1>타임리프 주석</h1>
+	<h4 th:text="${data}">html data</h4>
+	<h3>1. 표준 HTML 주석</h3>
+	<!-- <h4 th:text="${data}">html data</h4> -->
+	<h3>2. 타임리프 파서 주석 : 소스보기를 해도 주석 내용 보이지 않는다</h3>
+	<!--/* [[$(data)]] */-->
+	<!--/* 소스상에서는 살아있는 것처럼 보이지만 랜더링시에는 보이지 않는다.-->
+	<h4 th:text="${data}">html data</h4>
+	<h4 th:text="${data}">html data</h4>
+	<h4 th:text="${data}">html data</h4>
+	<!-- */-->
+	<h3>3. 타임리프 프로토타입 주석 : 소스상으로는 주석처리지만 실제 랜더링시에는 나타남</h3>
+	<!--/*/ 
+	<h4 th:text="${data}">html data</h4>
+	/*/-->
+</body>
+</html>

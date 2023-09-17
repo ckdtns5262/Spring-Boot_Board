@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Basic Objects</title>
+</head>
+<body>
+	<h1>Expression Basic Objects</h1>
+	<ul>
+		<li>locale : <span th:text="${#locale}"></span></li>
+		<!--
+		<li>ctx : <span th:text="${#ctx}"></span></li>
+		<li>vars : <span th:text="${#vars}"></span></li>
+		-->
+	</ul>
+	<h1>스프링 객체</h1>
+	<ul>
+		<li>Request Parameter : <span th:text="${param.paramData}"></span></li>
+		<li>Session : <span th:text="${session.sessionData}"></span></li>
+	</ul>
+</body>
+</html>
+
+
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Spring Expression Language</title>
+</head>
+<body>
+	<h1>Spring Expression Language</h1>
+	<h3>Object</h3>
+	<ul>
+		<li>${member.name} : <span th:text="${member.name}"></span></li>
+		<li>${member['name']} : <span th:text="${member['name']}"></span></li>
+		<li>${member.getName()} : <span th:text="${member.getName()}"></span></li>
+		<li>${member} : <span th:text="${member}"></span></li>
+	</ul>
+	<h3>List</h3>
+	<ul>
+		<li>${members[0].name} : <span th:text="${members[0].name}"></span></li>
+		<li>${members[0]['name'] : <span th:text="${members[0]['name']}"></span></li>
+		<li>${members[0].getName() : <span th:text="${members[0].getName()}"></span></li>
+	</ul>
+	<h3>Map</h3>
+	<ul>
+		
+		<li>${memberMap['member1'].name} : <span th:text="${memberMap['member1'].name}"></span></li>
+		<li>${memberMap.member1['name']} : <span th:text="${memberMap.member1['name']}"></span></li>
+		<li>${memberMap['member2'].getName() : <span th:text="${memberMap['member2'].getName()}"></span></li>
+	</ul>
+</body>
+</html>

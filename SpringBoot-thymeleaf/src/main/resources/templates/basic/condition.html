@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>조건문</title>
+</head>
+<body>
+	<h1>if, unless 조건문</h1>
+	<table border="1">
+		<tr>
+			<th>id</th>
+			<th>name</th>
+			<th>age</th>
+		</tr>
+		<tr th:each="member : ${members}">
+			<td th:text="${member.id}"></td>
+			<td th:text="${member.name}"></td>
+			<td>
+				<span th:text="${member.age}"></span>
+				<!-- 공백이 있는 문장인 경우에는 ''로 감싸줘야 한다.' -->
+				<span th:text="'30살 이상'" th:if="${member.age >= 30}"></span>
+				<span th:text="'30살 이하'" th:unless="${member.age >= 30}"></span>
+			</td>
+		</tr>
+	</table>
+	
+	<h1>switch case 조건문</h1>
+	<table border="1">
+		<tr>
+			<th>id</th>
+			<th>name</th>
+			<th>age</th>
+		</tr>
+		<tr th:each="member : ${members}">
+			<td th:text="${member.id}"></td>
+			<td th:text="${member.name}"></td>
+			<td th:switch="${member.age}">
+				<span th:case="20">20살</span>
+				<span th:case="32">32살</span>
+				<span th:case="40">40살</span>
+				<span th:case="*">해당없음</span>
+			</td>			
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>URL Link</title>
+</head>
+<body>
+	<h1>URL 링크</h1>
+	<ul>
+		<!-- $ 대신에 @를 넣어서 링크를 걸어준다 -->
+		<li>기본링크 : <a th:href="@{/basic/date}">basic url</a></li>
+		<li>Param 링크 : <a th:href="@{/hello(param1=${param1}, param2=${param2})}">Query Param</a></li>
+		<li><a th:href="@{/hello/{param3}(param3=${param2})}">경로변수</a></li>
+		<li><a th:href="@{/hello/{param3}/{param4}(param3=${param2}, param4=${param1})}">경로변수 2개</a></li>
+		<!-- param2는 여기서 Query param으로 전환됨-->
+		<li><a th:href="@{/hello/{param1}(param1=${param1}, param2=${param2})}">경로변수 + 쿼리파라미터</a></li>
+		
+	</ul>
+</body>
+</html>

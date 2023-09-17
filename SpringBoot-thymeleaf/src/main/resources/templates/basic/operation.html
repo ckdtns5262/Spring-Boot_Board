@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Operation 연산자</title>
+</head>
+<body>
+	<h1>Operation 연산자</h1>
+	<h3>산술 연산</h3>
+	<ul>
+		<li>10 + 2 = <span th:text="10 + 2"></span></li> <!-- 직접 연산함 -->
+		<li>10 % 2 == 0 <span th:text="10 % 2 == 0"></span></li> <!-- 연산을 해서 결과를 도출해줌-->
+	</ul>
+	<h3>비교 연산</h3>
+	<ul>
+		<li>2 > 10 : <span th:text="2 > 10"></span></li>
+		<li>2 > 10 : <span th:text="2 &gt; 10"></span></li>
+		<li>2 > 10 : <span th:text="2 gt 10"></span></li>
+		
+		<li>2 >= 10 : <span th:text="2 >= 10"></span></li>
+		<li>2 ge 10 : <span th:text="2 ge 10"></span></li>
+
+		<li>2 == 10 : <span th:text="2 == 10"></span></li>		
+		<li>2 != 10 : <span th:text="2 != 10"></span></li>		
+	</ul>
+	<h3>삼항 연산자</h3>
+	<ul>
+		<li>(10 % 2 == 0) ? '짝수' : '홀수' 결과 =>  <span th:text="(10 % 2 == 0) ? '짝수' : '홀수'"></span></li>
+	</ul>
+	<h3>Elvis 연산자 => ?:</h3>
+	<h4>=> 모델에 값을 담아도 그 데이터가 null인지 아닌지 확인해야 할때(데이터가 없어서인지 null인지 확인 가능)</h4>
+	<ul>
+		<li>${data}?: '데이터가 없습니다.' : <span th:text="${data}?: '데이터가 없습니다'"></span></li>
+		<li>${nullData}?: '데이터가 없습니다.' : <span th:text="${nullData}?: '데이터가 없습니다'"></span></li>
+	</ul>
+	<h3>No-Operation</h3>
+	<h4>=> _를 써주면 content안에 있는 내용도 출력 가능</h4>
+	<ul>
+		<li>${data}?:_ : <span th:text="${data1}?:_">데이터가 없습니다.</span></li>
+		<li>${nullData}?:_ : <span th:text="${nullData}?:_">데이터가 없습니다.</span></li>
+	</ul>
+</body>
+</html>

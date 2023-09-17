@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원가입 페이지</title>
+<link href="/default.css" rel="stylesheet">
+</head>
+<body>
+	<div id="container">
+		<h1>회원가입 Form</h1>
+		<form action="join" method="post">
+		  <table th:object="${member}">
+			<tr>
+			 <th>ID</th>
+			 <td><input type="text" th:field="*{member_id}"></td>
+			</tr>		
+			<tr>
+			  <th>Password</th>
+			  <td><input type="password" th:field="*{password}"></td>
+			</tr>
+			<tr>
+			  <th>name</th>
+			  <td><input type="text" th:field=*{name}></td>
+			</tr>
+			<tr>
+			  <th>gender</th>
+			  <td>
+			  <label for="gender1">남성</label>
+			  <input type="radio" th:field="*{gender}" value="MALE">
+			  <label for="gender2">여성</label>
+			  <input type="radio" th:field="*{gender}" value="FEMALE">
+			  </td>
+			</tr>
+			<tr>
+			  <th>birth</th>
+			  <td><input type="date" th:field="*{birth}"></td>
+			</tr>
+			<tr>
+			  <th>email</th>
+			  <td><input type="email" th:field="*{email}"></td>
+			</tr>
+		  </table>
+		  <p>
+			<div class="center">
+			  <input type="submit" value="가입하기" >
+			  <input type="reset"  value="다시작성">
+ 			</div>
+		  </p>
+		</form>
+	</div>
+</body>
+</html>

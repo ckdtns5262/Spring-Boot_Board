@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Attribute 속성 추가 및 설정</title>
+</head>
+<body>
+	<h1>속성 설정</h1>
+	<input type="text" name="name" th:name="member" th:class="member">
+	<h1>속성 추가</h1>
+	-th:attrappend : 뒤에 붙힘 <input type="text" class="text" th:attrappend="class ='Large'"><br/>
+	-th:attrprepend : 앞에 붙힘 <input type="text" class="text" th:attrprepend="class ='Large'"><br/>															
+	-th:classappend : 새로운 클래스 속성 추가 <input type="text" class="text" th:classappend="Large"><br/>															
+	<h1>checked 처리</h1>
+	- checked : O : <input type="checkbox" name="active" th:checked="true"><br/>
+	- checked : X :  <input type="checkbox" name="active" th:checked="false">
+</body>	
+</html>
