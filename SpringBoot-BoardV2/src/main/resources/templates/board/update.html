@@ -8,8 +8,8 @@
 <body>
 <div id="container">
   <h1>[ 게시판 - 글수정 ]</h1>
-  <form th:action="@{/update(id=${board.id})}" method="post">
-    <table th:object="${board}">
+  	<form th:action="@{/board/update(board_id=${board.board_id})}" th:object="${board}" method="post">
+    <table >
       <tr>
         <th>제목</th>
         <td><input type="text" name="title" th:value="*{title}"></td>
@@ -28,18 +28,14 @@
       </tr>
       <tr>
         <th>작성자</th>
-        <td><input type="text" name="username" th:value="*{username}"></td>
-      </tr>
-      <tr>
-        <th>패스워드</th>
-        <td><input type="password" placeholder="수정 시 패스워드를 입력해 주세요" name="password"></td>
+        <td th:text="${session.loginMember.member_id}"></td>
       </tr>
     </table>
     <p>
     <div class="center">
-    <input type="button" onclick="location.href='/'" value="메인으로">
+    <input type="button" onclick="location.href='/board/list'" value="목록으로">
     <input type="submit" value="수정하기">
     <input type="reset" value="취소">
   </div>
-  </formbody>
+  </form>
 </html>

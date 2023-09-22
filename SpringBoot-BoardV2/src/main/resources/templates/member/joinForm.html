@@ -8,40 +8,63 @@
 <body>
 	<div id="container">
 		<h1>회원가입 Form</h1>
-		<form action="join" method="post">
-		  <table th:object="${member}">
+		<form action="join" method="post" th:object="${member}">
+			<!--<div th:if="${errMsg}" th:text="${errMsg}"></div> -->
+			<div th:if="${#fields.hasGlobalErrors()}">
+				<p th:each="err : ${#fields.globalErrors}" th:text="${err}" class="error"></p>
+			</div>
+		  <table >
 			<tr>
 			 <th>ID</th>
-			 <td><input type="text" th:field="*{member_id}"></td>
+			 <td>
+				 <input type="text" th:field="*{member_id}">
+				 <div th:errors="*{member_id}" class="error"></div>	 
+			 </td>
 			</tr>		
 			<tr>
 			  <th>Password</th>
-			  <td><input type="password" th:field="*{password}"></td>
+			  <td>
+				  <input type="password" th:field="*{password}">
+				  <div th:errors="*{password}" class="error"></div>
+			  </td>
 			</tr>
 			<tr>
 			  <th>name</th>
-			  <td><input type="text" th:field=*{name}></td>
+			  <td>
+				  <input type="text" th:field=*{name}>
+				  <div th:errors="*{name}" class="error"></div>
+			  </td>
 			</tr>
 			<tr>
 			  <th>gender</th>
 			  <td>
-			  <label for="gender1">남성</label>
+			  
+			  <!--<label for="gender1">남성</label>
 			  <input type="radio" th:field="*{gender}" value="MALE">
 			  <label for="gender2">여성</label>
-			  <input type="radio" th:field="*{gender}" value="FEMALE">
+			  <input type="radio" th:field="*{gender}" value="FEMALE"> -->
+			  <th:block th:each="gender : ${T(com.example.board.model.member.GenderType).values()}">
+				  <label th:for="${#ids.next('gender')}" th:text="${gender.description}"></label>
+				  <input type="radio" th:field="*{gender}" th:value="${gender}">
+			  </th:block>
+			  <div th:errors="*{gender}" class="error"></div>
 			  </td>
 			</tr>
 			<tr>
 			  <th>birth</th>
-			  <td><input type="date" th:field="*{birth}"></td>
+			  <td>
+				  <input type="date" th:field="*{birth}">
+				  <div th:errors="*{birth}" class="error"></div>
+			  </td>
 			</tr>
 			<tr>
 			  <th>email</th>
-			  <td><input type="email" th:field="*{email}"></td>
+			  <td><input type="text" th:field="*{email}"></td>
 			</tr>
 		  </table>
 		  <p>
 			<div class="center">
+			  <input type="button" value="메인으로" onclick="location.href='/'">
 			  <input type="submit" value="가입하기" >
 			  <input type="reset"  value="다시작성">
  			</div>

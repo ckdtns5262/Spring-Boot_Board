@@ -1,95 +1,145 @@
 package com.example.board.controller;
 
-import javax.annotation.PostConstruct;
+
+
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.example.board.model.board.Board;
-import com.example.board.repository.BoardRepository;
+import com.example.board.model.board.BoardUpdateForm;
+import com.example.board.model.board.BoardWriteForm;
+import com.example.board.model.member.Member;
+import com.example.board.repository.BoardMapper;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequestMapping("board")
 @Controller
 public class BoardController {
 	
 	@Autowired
-	private BoardRepository boardRepository;
+	private final BoardMapper boardMapper;
 	
-	// 초기데이터 생성(생성 이후에 실행될 메서드)
-	@PostConstruct
-	public void initData() {
-		boardRepository.saveBoard(new Board("제목1", "내용1", "작성자1","1234"));
-		boardRepository.saveBoard(new Board("제목2", "내용2", "작성자2","5678"));
-		boardRepository.saveBoard(new Board("제목3", "내용3", "작성자3","4321"));
-		boardRepository.saveBoard(new Board("제목4", "내용4", "작성자4","8765"));
+	public BoardController(BoardMapper boardMapper) {
+		this.boardMapper = boardMapper;
 	}
-		
-	// 메인페이지 이동 
-	@GetMapping("")
-	public String home() {
-		log.info("home() 실행");
-		return "redirect:/list";
-	}
+	
 	
 	// 게시글 작성 페이지로 이동 
 	@GetMapping("write")
-	public String writeForm() {
-		return "write";
+	public String writeForm(Model model) {
+		model.addAttribute("writeForm", new BoardWriteForm());
+		return "board/write";
 	}
 	
 	// 게시글 저장
 	@PostMapping("write")
-	public String write(@ModelAttribute Board board) {
-		log.info("board: {}" + board);
-		boardRepository.saveBoard(board);
-		return "/";
+	public String write(@SessionAttribute(name = "loginMember" ,required = false) Member loginMember,
+						@Validated @ModelAttribute("writeForm") BoardWriteForm boardWriteForm, 
+						 BindingResult result) {
+		log.info("boardWriteForm : {}", boardWriteForm);
+		
+		if(result.hasErrors()) {
+			return "board/write";
+		}
+		// board객체로 
+		Board board = BoardWriteForm.toBoard(boardWriteForm);
+		
+		board.setMember_id(loginMember.getMember_id());
+		
+		boardMapper.saveBoard(board);
+		return "redirect:/board/list";
 	}
 	
 	// 게시글 목록 출력 
 	@GetMapping("list")
-	public String list(Model model) {
-		model.addAttribute("boards", boardRepository.findAllBoard());
-		return "list";
+	public String list(@SessionAttribute(name = "loginMember", required = false) Member loginMember, Model model) { // name 속성은 꺼내고 싶은 세션 이름
+//		HttpSession session = request.getSession(false);
+//		// 로그인 하지 않으면 로그인 페이지로 
+//		if(session == null || session.getAttribute("loginMember") == null) {
+//			return "redirect:/member/login";
+//		} 
+		if(loginMember == null) {
+			return "redirect:/member/login";
+		}
+		
+		List<Board> findAllBoard = boardMapper.findAllBoard();
+		model.addAttribute("boards", findAllBoard);
+//		log.info("findAllBoard : {}", findAllBoard);
+		
+		
+		// 로그인 했으면 게시판으로 
+		return "board/list";
 	}
 	
 	// 게시글 읽기 
 	@GetMapping("read")
-	public String read(@RequestParam Long id, Model model) {
-		Board board = boardRepository.findBoard(id);
-	//	board.setHit(board.getHit() + 1);
-		board.addHit();
+	public String read(@SessionAttribute(name = "loginMember") Member loginMember,
+						@RequestParam Long board_id, Model model) {
+		
+		if(loginMember == null) {
+			return "redirect:/member/login";
+		}
+		
+		Board board = boardMapper.findBoardById(board_id);
 		model.addAttribute("board", board);
-		return "read";
+		log.info("findBoardById : {}", board);
+		
+		board.addHit();
+		
+		boardMapper.updateBoard(board);
+	
+
+		return "board/read";
 	}
 	
 	// 수정하기 페이지 이동
 	@GetMapping("update")
-	public String update(@RequestParam Long id, Model model) {
-		model.addAttribute("board", boardRepository.findBoard(id));
-		return "update";	
+	public String update(@SessionAttribute(name = "loginMember") Member loginMember,
+						 @RequestParam Long board_id, Model model) {
+		
+		if(loginMember == null) {
+			return "redirect:/board/list";
+		}
+		Board findBoardById = boardMapper.findBoardById(board_id);
+		model.addAttribute("board", findBoardById);
+		return "board/update";	
 	}
 	
 	// 게시글 수정
 	@PostMapping("update")
-	public String updateBoard(@RequestParam Long id, @ModelAttribute Board updateBoard, Model model) {
-		log.info("id : {} , board : {} " , id, updateBoard);
-		Board board = boardRepository.findBoard(id);
-		if(board.getPassword().equals(updateBoard.getPassword())) {
-			boardRepository.updateBoard(id, updateBoard);
-		}
-		return "redirect:/";
+	public String updateBoard(@SessionAttribute(value = "loginMember", required = false) Member loginMember,
+							  @RequestParam Long board_id, 
+							 @Validated @ModelAttribute("board") BoardUpdateForm updateBoard, Model model) {
+		log.info("board_id : {} , board : {} " , board_id, updateBoard);
 		
-		// 수정작업 
-		// 1. 제목, 내용, 작성자 수정되도록 
-		// 2. 글 작성시 썻던 패스워드와 맞아야 함
-		// 3. 작성자 입력칸 
-		// 4. 수정하기 페이지를 로드했을 때 전에 썼던 내용이 표시되도록.
+		Board board = boardMapper.findBoardById(board_id);
+		
+		// Board 객체가 없거나 작성자가 로그인한 사용자의 아이디와 다르면 수정하지 않고 리스트로 리다이렉트 시킨다.
+		if(board == null || !board.getMember_id().equals(loginMember.getMember_id())) {
+			return "redirect:/board/list";
+		}
+		board.setTitle(updateBoard.getTitle());
+		board.setContents(updateBoard.getContents());
+		
+		boardMapper.updateBoard(board);
+		
+		return "redirect:/board/list";
+		
+		
 	}
 	
 	// 게시글 삭제
@@ -97,11 +147,6 @@ public class BoardController {
 	@PostMapping("delete")
 	public String remove(@RequestParam Long id, @RequestParam String password) {
 		// id에 해당하는 게시글이 있고, 입력한 패스워드가 일치하면 게시글을 삭제
-		Board findBoard = boardRepository.findBoard(id);
-		log.info("id : {}, password : {}" , id , password);
-		if(findBoard != null && password.equals(findBoard.getPassword())) {
-			boardRepository.removeBoard(id);
-		}
-		return "redirect:/";
+		return "redirect:/board/list";
 	}
 }

@@ -19,3 +19,9 @@ th, td {
 .center {
     text-align: center;
 }
+
+.error {
+	color : red;
+	font-weight: bold;
+	font-style: italic;
+}

@@ -8,9 +8,7 @@
 <body>
 <div id="container">
   <h1>[ 게시판 - 리스트 ]</h1>
-  <button onclick="location.href='member/join'">
-	 회원가입 
-  </button>
+ 
   <p>
   <table>
     <tr>
@@ -20,10 +18,10 @@
       <th>조회수</th>
       <th>작성일</th>
     </tr>
-    <tr th:each="board : ${boards}">
-      <td class="center" th:text="${board.id}">일련번호</td>
-      <td class="center"><a th:href="@{/read(id=${board.id})}" th:text="${board.title}"></a></td>
-      <td class="center" th:text="${board.username}">작성자</td>
+    <tr th:each="board, i : ${boards}">
+      <td class="center" th:text="${board.board_id}">일련번호</td>
+      <td class="center"><a th:onclick="|location.href='@{read(board_id=${board.board_id})}'|" th:text="${board.title}"></a></td>
+      <td class="center" th:text="${board.member_id}">작성자</td>
       <td class="center" th:text="${board.hit}">조회수</td>	
       <td class="center" th:text="${#temporals.format(board.created_time, 'yyyy-MM-dd')}">작성일</td>
     </tr>
@@ -31,7 +29,7 @@
   <p>
   <div class="center">
     <input type="button" onclick="location.href='/'" value="메인으로">
-    <input type="button" onclick="location.href='/write'" value="글쓰기">
+    <input type="button" onclick="location.href='/board/write'" value="글쓰기">
   </div>
 </div>
 </body>
