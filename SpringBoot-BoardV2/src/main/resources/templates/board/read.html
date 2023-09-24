@@ -38,7 +38,7 @@
 			<!--<input type="button" th:onclick="|location.href='/update?board_id=${board.id}'|" value="수정하기"> -->
 			<th:block th:if="${session.loginMember.member_id == board.member_id}">
 			<input type="button" th:onclick="|location.href='@{update(board_id=${board.board_id})}'|" value="수정하기">
-			<input type="button" value="삭제하기">
+			<input type="button" th:onclick="|location.href='@{delete(board_id=${board.board_id})}'|" value="삭제하기">
 			</th:block>
 
 

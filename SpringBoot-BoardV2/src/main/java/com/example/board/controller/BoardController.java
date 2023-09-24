@@ -40,7 +40,12 @@ public class BoardController {
 	
 	// 게시글 작성 페이지로 이동 
 	@GetMapping("write")
-	public String writeForm(Model model) {
+	public String writeForm(@SessionAttribute(value="loginMember", required = false)Member loginMember,
+							Model model) {
+		if(loginMember == null) {
+			return "redirect:/member/login";
+		}
+		
 		model.addAttribute("writeForm", new BoardWriteForm());
 		return "board/write";
 	}
@@ -51,6 +56,9 @@ public class BoardController {
 						@Validated @ModelAttribute("writeForm") BoardWriteForm boardWriteForm, 
 						 BindingResult result) {
 		log.info("boardWriteForm : {}", boardWriteForm);
+		if(loginMember == null) {
+			return "redirect:/member/login";
+		}
 		
 		if(result.hasErrors()) {
 			return "board/write";
@@ -95,14 +103,17 @@ public class BoardController {
 		}
 		
 		Board board = boardMapper.findBoardById(board_id);
-		model.addAttribute("board", board);
-		log.info("findBoardById : {}", board);
-		
+
+		if(board == null) {
+			log.info("게시글 없음");
+			return "redirect:/board/list";
+		}
 		board.addHit();
 		
 		boardMapper.updateBoard(board);
 	
-
+		model.addAttribute("board", board);
+		
 		return "board/read";
 	}
 	
@@ -123,10 +134,21 @@ public class BoardController {
 	@PostMapping("update")
 	public String updateBoard(@SessionAttribute(value = "loginMember", required = false) Member loginMember,
 							  @RequestParam Long board_id, 
-							 @Validated @ModelAttribute("board") BoardUpdateForm updateBoard, Model model) {
+							 @Validated @ModelAttribute("board") BoardUpdateForm updateBoard, 
+							 Model model, BindingResult result) {
 		log.info("board_id : {} , board : {} " , board_id, updateBoard);
+		if(loginMember == null) {
+			return "redirect:/member/login";
+		}
+		if(result.hasErrors()) {
+			return "board/update";
+		}
 		
 		Board board = boardMapper.findBoardById(board_id);
+		
+		if(updateBoard.getTitle() == null || updateBoard.getContents() == null) {
+			result.reject("updateError", "수정된 제목과 내용을 입력해주세요");
+		}
 		
 		// Board 객체가 없거나 작성자가 로그인한 사용자의 아이디와 다르면 수정하지 않고 리스트로 리다이렉트 시킨다.
 		if(board == null || !board.getMember_id().equals(loginMember.getMember_id())) {
@@ -144,9 +166,21 @@ public class BoardController {
 	
 	// 게시글 삭제
 	// 처음 작성할 때 만들었던 패스워드를 입력하고 삭제하기 버튼을 누르면 삭제되도록
-	@PostMapping("delete")
-	public String remove(@RequestParam Long id, @RequestParam String password) {
+	@GetMapping("delete")
+	public String remove(@SessionAttribute(name = "loginMember", required = false) Member loginMember,
+			@RequestParam Long board_id) {
+		
+		if(loginMember == null) {
+			return "redirect:/member/login";
+		}
+		
+		Board board = boardMapper.findBoardById(board_id);
+		
 		// id에 해당하는 게시글이 있고, 입력한 패스워드가 일치하면 게시글을 삭제
+		if(board == null || !board.getMember_id().equals(loginMember.getMember_id())) {
+			return "redirect:/board/list";
+		}
+		boardMapper.removeBoard(board_id);
 		return "redirect:/board/list";
 	}
 }
