@@ -25,7 +25,7 @@
 			</tr>
 			<tr>
 				<th>작성일</th>
-				<td th:text="*{created_time}"></td>
+				<td th:text="*{#temporals.format(created_time , 'yyyy-MM-dd HH:mm')}"></td>
 			</tr>
 			<tr>
 				<th>작성자</th>

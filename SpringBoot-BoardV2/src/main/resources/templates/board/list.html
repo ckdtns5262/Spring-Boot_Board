@@ -18,12 +18,12 @@
       <th>조회수</th>
       <th>작성일</th>
     </tr>
-    <tr th:each="board, i : ${boards}">
-      <td class="center" th:text="${board.board_id}">일련번호</td>
+    <tr th:each="board : ${boards}">
+      <td class="center" th:text="${boardStat.count}">일련번호</td>
       <td class="center"><a th:onclick="|location.href='@{read(board_id=${board.board_id})}'|" th:text="${board.title}"></a></td>
       <td class="center" th:text="${board.member_id}">작성자</td>
       <td class="center" th:text="${board.hit}">조회수</td>	
-      <td class="center" th:text="${#temporals.format(board.created_time, 'yyyy-MM-dd')}">작성일</td>
+      <td class="center" th:text="${#temporals.format(board.created_time, 'yyyy-MM-dd HH:mm')}">작성일</td>
     </tr>
   </table>
   <p>

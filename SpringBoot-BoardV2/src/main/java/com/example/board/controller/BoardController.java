@@ -1,8 +1,6 @@
 package com.example.board.controller;
 
 
-
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,10 +82,12 @@ public class BoardController {
 			return "redirect:/member/login";
 		}
 		
+		// 데이터베이스에 저장된 모든 Board 객체를 리스트 형태로 받는다.
 		List<Board> findAllBoard = boardMapper.findAllBoard();
-		model.addAttribute("boards", findAllBoard);
 //		log.info("findAllBoard : {}", findAllBoard);
 		
+		// Board 리스트를 model에 저장한다.
+		model.addAttribute("boards", findAllBoard);
 		
 		// 로그인 했으면 게시판으로 
 		return "board/list";
@@ -95,7 +95,7 @@ public class BoardController {
 	
 	// 게시글 읽기 
 	@GetMapping("read")
-	public String read(@SessionAttribute(name = "loginMember") Member loginMember,
+	public String read(@SessionAttribute(name = "loginMember" ,required = false) Member loginMember,
 						@RequestParam Long board_id, Model model) {
 		
 		if(loginMember == null) {
@@ -108,8 +108,9 @@ public class BoardController {
 			log.info("게시글 없음");
 			return "redirect:/board/list";
 		}
-		board.addHit();
-		
+		// 조회수 증가
+		board.addHit(); // 조회수 1증가
+		// Todo : DB에서 조회수 증가
 		boardMapper.updateBoard(board);
 	
 		model.addAttribute("board", board);
@@ -126,6 +127,10 @@ public class BoardController {
 			return "redirect:/board/list";
 		}
 		Board findBoardById = boardMapper.findBoardById(board_id);
+		// Board 객체가 없거나 작성자가 로그인한 사용자의 아이디와 다르면 수정하지 않고 리스트로 리다이렉트 시킨다.
+		if(findBoardById == null || !findBoardById.getMember_id().equals(loginMember.getMember_id())) {
+			return "redirect:/board/list";
+		}
 		model.addAttribute("board", findBoardById);
 		return "board/update";	
 	}
@@ -134,23 +139,20 @@ public class BoardController {
 	@PostMapping("update")
 	public String updateBoard(@SessionAttribute(value = "loginMember", required = false) Member loginMember,
 							  @RequestParam Long board_id, 
-							 @Validated @ModelAttribute("board") BoardUpdateForm updateBoard, 
-							 Model model, BindingResult result) {
+							  @Validated @ModelAttribute("board") BoardUpdateForm updateBoard, 
+							  Model model, BindingResult result) {
 		log.info("board_id : {} , board : {} " , board_id, updateBoard);
+		
 		if(loginMember == null) {
 			return "redirect:/member/login";
 		}
+		
 		if(result.hasErrors()) {
-			return "board/update";
+			return "/board/update"; // board_id는 그대로 갖고 있어야 하기 때문에 redirect 하지 않음
 		}
 		
 		Board board = boardMapper.findBoardById(board_id);
 		
-		if(updateBoard.getTitle() == null || updateBoard.getContents() == null) {
-			result.reject("updateError", "수정된 제목과 내용을 입력해주세요");
-		}
-		
-		// Board 객체가 없거나 작성자가 로그인한 사용자의 아이디와 다르면 수정하지 않고 리스트로 리다이렉트 시킨다.
 		if(board == null || !board.getMember_id().equals(loginMember.getMember_id())) {
 			return "redirect:/board/list";
 		}
@@ -158,10 +160,7 @@ public class BoardController {
 		board.setContents(updateBoard.getContents());
 		
 		boardMapper.updateBoard(board);
-		
 		return "redirect:/board/list";
-		
-		
 	}
 	
 	// 게시글 삭제
