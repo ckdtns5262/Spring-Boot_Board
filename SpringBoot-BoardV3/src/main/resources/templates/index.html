@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>메인 페이지</title>
+	<link rel="stylesheet" href="/default.css">
+</head>
+
+<body>
+	<div id="container">
+		<h1>[ 메인 페이지 ]</h1>
+		<!-- 세션 로그인 처리 -->
+		<div th:unless="${session.loginMember}"> 
+			<button onclick="location.href='member/join'">회원가입</button>
+			<button onclick="location.href='member/login'">로그인</button>
+		</div>
+		<div th:if="${session.loginMember}">
+			<p>[[${session.loginMember.name}]]님 환영합니다</p>
+			<button onclick="location.href='board/list'">게시판</button>
+			<button onclick="location.href='member/logout'">로그아웃</button>
+		</div>
+		<!-- 쿠키 로그인 처리 -->
+		<!-- 
+		<div th:unless="${cookieLoginId}">  unless :  false면 실행됨 => 쿠키아이디가 없으면
+			<button onclick="location.href='member/join'">회원가입</button>
+			<button onclick="location.href='member/login'">로그인</button>
+		</div>
+		<div th:if="${cookieLoginId}"> : true면 실행됨 => 쿠키아이디가 있으면 
+			<p>[[${cookieLoginId}]]님 환영합니다</p>
+			<button onclick="location.href='/list'">게시판</button>
+			<button onclick="location.href='member/logout'">로그아웃</button> -->
+		</div>
+	</div>
+</body>
+
+</html>
