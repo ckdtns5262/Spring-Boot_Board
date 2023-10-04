@@ -32,7 +32,7 @@ public class LogFilter implements Filter {
 			
 			log.info("requestURI : {} " , requestURI);
 			
-			chain.doFilter(request, response);
+			chain.doFilter(request, response); // 
 		} catch (Exception e) {
 		} finally {
 			log.info("LogFilter 종료");

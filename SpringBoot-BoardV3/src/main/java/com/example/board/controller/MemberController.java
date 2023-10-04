@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.board.model.member.LoginForm;
 import com.example.board.model.member.Member;
@@ -40,6 +41,7 @@ public class MemberController {
 	// 회원가입 페이지 이동 
 	@GetMapping("join")
 	public String joinForm(Model model) {
+		log.info("회원가입 실행");
 		model.addAttribute("member", new MemberJoinForm());
 		return "member/joinForm";
 	}
@@ -99,9 +101,12 @@ public class MemberController {
 	
 	@PostMapping("login")
 	public String login(@Validated @ModelAttribute("loginForm") LoginForm loginForm,
-						BindingResult result, Model model, HttpServletResponse response, HttpServletRequest request) {
+						BindingResult result, Model model, HttpServletResponse response, HttpServletRequest request,
+						@RequestParam(defaultValue = "/") String redirectURL) {
 		
 		log.info("loginForm : {}", loginForm);
+		log.info("로그인 실행");
+		log.info("redirectURL : {} ", redirectURL);
 		if(result.hasErrors()) {
 			return "member/loginForm";
 		}
@@ -133,7 +138,9 @@ public class MemberController {
 		HttpSession session = request.getSession();
 		// session 저장 
 		session.setAttribute("loginMember", findMember);
-		return "redirect:/";
+		
+		
+		return "redirect:" + redirectURL;
 	}
 	
 	

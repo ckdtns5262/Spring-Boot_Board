@@ -32,13 +32,15 @@ public class LoginCheckFilter implements Filter {
 
 			if (isLoginCheckPath(requestURI)) {
 				HttpSession session = httpRequest.getSession(false);
+				
 				if (session == null || session.getAttribute("loginMember") == null) {
 					// 로그인 하지 않은 상태
 					log.info("로그인 하지 않은 사용자의 요청");
 					httpResponse.sendRedirect("/member/login");
-					return;
+					return;    // sendRedirect 후에는 return 해서 종료시켜줘야 함
 				}
 			}
+
 			chain.doFilter(request, response);
 		} catch (Exception e) {
 			

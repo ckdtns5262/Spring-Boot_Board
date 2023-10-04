@@ -17,6 +17,8 @@ public class HomeController {
 		log.info("인덱스 페이지 출력");
 //		log.info("cookieLoginId : {}" , cookieLoginId);
 //		model.addAttribute("cookieLoginId", cookieLoginId);
+		
+//		throw new RuntimeException("런타임 예외 발생!!");
 		return "index";
 	}
 	
