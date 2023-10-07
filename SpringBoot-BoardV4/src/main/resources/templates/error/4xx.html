@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>4xx Error Page</title>
+</head>
+<body>
+	<h2>4xx Error Page</h2>
+	<button onclick="history.back()">뒤로가기</button>
+	<button onclick="location.href='/'" >홈으로</button>
+	<ul>
+		<li>timestamp : [[${timestamp}]]</li>
+		<li>path : [[${path}]]</li>
+		<li>status : [[${status}]]</li>
+		<li>message : [[${message}]]</li>
+		<li>exception : [[${exception}]]</li>
+		<li>trace : [[${trace}]]</li>
+	</ul>
+</body>
+</html>

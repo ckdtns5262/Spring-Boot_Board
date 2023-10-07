@@ -1,0 +1,24 @@
+server:
+  error:
+    include-exception: false
+    whitelabel:
+      enabled: true
+  servlet:
+    session:
+      tracking-modes: cookie
+  port: 9000
+  
+
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: board
+    password: 1234
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    
+mybatis:
+  type-aliases-package: com.example.board.model
+  mapper-locations:
+  - classpath:mapper/**/*.xml
+ 
+ 
