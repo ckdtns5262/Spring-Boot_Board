@@ -15,10 +15,16 @@ spring:
     username: board
     password: 1234
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    
+#  servlet:
+#    multipart:
+#      max-file-size:
+#        100MB
+#      max-request-size:
+#        500MB
+            
 mybatis:
-  type-aliases-package: com.example.board.model
-  mapper-locations:
-  - classpath:mapper/**/*.xml
+#  type-aliases-package: com.example.board.model
+   config-location: classpath:config/mybatis-config.xml
+   mapper-locations: classpath:mapper/**/*.xml
  
  

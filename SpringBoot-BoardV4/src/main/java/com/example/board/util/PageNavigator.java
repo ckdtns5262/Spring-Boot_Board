@@ -1,5 +1,8 @@
 package com.example.board.util;
 
+import lombok.Data;
+
+@Data
 public class PageNavigator {
     //페이지 관련 정보
     private int countPerPage;		//페이지당 글목록 수

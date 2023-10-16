@@ -31,6 +31,15 @@
 				<th>작성자</th>
 				<td th:text="*{member_id}"></td>
 			</tr>
+			<tr>
+				<th>첨부파일</th>
+				<td>
+				   <a th:if="${file}" th:text="${file.original_filename}" 
+				   	  th:href="@{download/{id}(id=${file.attachedFile_id})}"></a>
+				   <a th:unless="${file}" class="error">첨부파일이 없습니다</a>
+				</td>
+			</tr>
+			
 		</table>
 		<p>
 		<div class="center">

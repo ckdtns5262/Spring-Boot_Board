@@ -22,6 +22,7 @@ import com.example.board.model.member.LoginForm;
 import com.example.board.model.member.Member;
 import com.example.board.model.member.MemberJoinForm;
 import com.example.board.repository.MemberMapper;
+import com.example.board.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,8 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class MemberController {
 
+	
+	private MemberService memberService;
+	
 	@Autowired
-	private MemberMapper memberMapper;
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
+	}
+	
 	
 //	@Autowired
 //	public void setMemberMapper(MemberMapper memberMapper) {
@@ -67,13 +74,13 @@ public class MemberController {
 			return "/member/joinForm";
 		}
 		
-		// 이미 가입된 아이디가 있는지
-		Member findMember = memberMapper.findMember(memberJoinForm.getMember_id());
-		if(findMember != null) {
+		
+		
+		if(memberService.findMember(member.getMember_id()) != null) {
 			result.reject("idError", "이미 가입된 ID 입니다 ");
 			return "/member/joinForm";
 		} else {
-			memberMapper.saveMember(member);
+			memberService.saveMember(member);
 			return "redirect:/";
 		}
 		
@@ -112,7 +119,7 @@ public class MemberController {
 		}
 		
 		// 로그인 검증
-		Member findMember = memberMapper.findMember(loginForm.getMember_id());
+		Member findMember = memberService.findMember(loginForm.getMember_id());
 		log.info("findMember : {}", findMember);
 		if(findMember == null) {
 			result.reject("loginError" , "아이디가 존재하지 않습니다");

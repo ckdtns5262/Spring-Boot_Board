@@ -29,8 +29,12 @@
 	</select>
 	
 	<!-- 전체 게시글 출력 -->
-	<select id="findAllBoard" resultType="Board">
-		select * from board
+	<select id="findBoards" resultType="Board">
+		select * from board 
+		<if test="_parameter != null">
+			where title like '%' || #{searchText} || '%'
+		</if>
+		order by created_time desc
 	</select>
 	
 	<!-- 게시글 수정 -->
@@ -69,5 +73,23 @@
 			)
 			
 	</insert>
+	<select id="findFileByBoardId" resultType="file">
+		select * from attached_file where board_id = #{board_id}
+	</select>
+	
+	<select id="findFileByAttachedFileId" resultType="file">
+		select * from attached_file where attachedFile_id = #{attachedFile_id}
+	</select>
+	
+	<select id="getTotal" resultType="int">
+		select count(*) from board
+		<if test="_parameter != null">
+			where title like '%' || #{searchText} || '%'
+		</if>
+	</select>
+	
+	<delete id="removeAttachedFile">
+		delete attached_file where attachedFile_id = #{attachedFile_id}
+	</delete>
 	
 </mapper>

@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <title>게시글 수정</title>
     <link rel="stylesheet" href="/default.css">
+    <script>
+		function removeFile(){
+			 document.getElementById("fileRemoved").value = "true";
+			 document.getElementById("attachedFile").style.display = "none";
+		}
+	</script>
 </head>
 <body>
 <div id="container">
   <h1>[ 게시판 - 글수정 ]</h1>
-  	<form th:action="@{/board/update(board_id=${board.board_id})}" th:object="${board}" method="post">
+  	<form th:action="@{/board/update(board_id=${board.board_id})}" enctype="multipart/form-data" th:object="${board}" method="post">
     <table>
       <tr>
         <th>제목</th>
@@ -36,10 +42,21 @@
         <th>작성자</th>
         <td th:text="*{member_id}"></td>
       </tr>
+      <tr>
+		<th>첨부파일</th>
+		<td>
+			<div id="attachedFile" th:if="${file}">
+			<span th:text="${file.original_filename}"/>
+			<button onclick="removeFile()">삭제</button>
+			</div>
+			<input type="file" name="file" th:unless="${file}">
+		</td>
+	  </tr>
     </table>
     <input type="hidden" th:field="*{hit}">
     <input type="hidden" th:field="*{created_time}">
     <input type="hidden" th:field="*{member_id}">
+    <input type="hidden" th:field="*{fileRemoved}">
         
     <div class="center">
     <input type="button" onclick="location.href='/board/list'" value="목록으로">

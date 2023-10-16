@@ -25,3 +25,7 @@ th, td {
 	font-weight: bold;
 	font-style: italic;
 }
+
+.right {
+	text-align: right;
+}

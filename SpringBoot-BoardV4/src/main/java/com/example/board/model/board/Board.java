@@ -26,4 +26,16 @@ public class Board {
 		// this.hit = hit + 1; 
 		this.hit++;
 	}
+	
+	public static BoardUpdateForm toBoardUpdateForm(Board board) {
+		BoardUpdateForm boardUpdateForm = new BoardUpdateForm();
+		boardUpdateForm.setBoard_id(board.getBoard_id());
+		boardUpdateForm.setTitle(board.getTitle());
+		boardUpdateForm.setContents(board.getContents());
+		boardUpdateForm.setMember_id(board.getMember_id());
+		boardUpdateForm.setHit(board.getHit());
+		boardUpdateForm.setCreated_time(board.getCreated_time());
+		
+		return boardUpdateForm;
+	}
 }

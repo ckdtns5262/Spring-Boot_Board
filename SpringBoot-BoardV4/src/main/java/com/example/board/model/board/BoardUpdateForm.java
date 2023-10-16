@@ -18,5 +18,6 @@ public class BoardUpdateForm {
 	private Long hit;
 	private String member_id;
 	private LocalDateTime created_time;
+	private boolean fileRemoved;
 	
 }

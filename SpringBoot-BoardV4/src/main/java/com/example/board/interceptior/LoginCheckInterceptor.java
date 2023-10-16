@@ -1,5 +1,7 @@
 package com.example.board.interceptior;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,7 +22,19 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 		
 		if (session == null || session.getAttribute("loginMember") == null) {
 			log.info("로그인을 하지 않은 사용자의 요청");
-			response.sendRedirect("/member/login?redirectURL=" + requestURI);
+			
+			Enumeration<String> parameterNames = request.getParameterNames();
+			StringBuffer stringBuffer = new StringBuffer();
+			
+			
+			while(parameterNames.hasMoreElements()) {
+				String parameterName = parameterNames.nextElement();
+				stringBuffer.append(parameterName + "=" + request.getParameter(parameterName) + "&");
+				
+			}
+			
+			
+			response.sendRedirect("/member/login?redirectURL=" + requestURI + "?" + stringBuffer.toString());
 			return false;
 		}
 
