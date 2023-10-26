@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 리스트</title>
+    <link rel="stylesheet" href="/default.css">
+    <style>
+		.a1 {
+			text-decoration: none; 
+			font-size: 17px;
+		}
+		a:visited {
+			color: black;		
+		}
+		a:active {
+			border: solid 1px gray;
+		}
+		
+	</style>
+	<script>
+		function search(){
+		let searchText = document.getElementById("searchText").value;
+		location.href="/board/list?searchText=" + searchText;
+		}
+			
+	</script>
+	
+</head>
+<body>
+<div id="container">
+  <h1>[ 게시판 - 리스트 ]</h1>
+ 	<div class="right">
+	 <label for="searchText">검색</label>
+	 <input type="search" id="searchText" name="searchText" th:value="${searchText}"/>
+	 <button onclick="search()">검색</button>
+ 	</div>
+  <p>
+  <table>
+    <tr>
+      <th>No</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>조회수</th>
+      <th>작성일</th>
+    </tr>
+    <tr th:each="board : ${boards}">
+      <td class="center" th:text="${boardStat.count}">일련번호</td>
+      <td class="center"><a th:onclick="|location.href='@{read(board_id=${board.board_id})}'|" th:text="${board.title}"></a></td>
+      <td class="center" th:text="${board.member_id}">작성자</td>
+      <td class="center" th:text="${board.hit}">조회수</td>	
+      <td class="center" th:text="${#temporals.format(board.created_time, 'yyyy-MM-dd HH:mm')}">작성일</td>
+    </tr>
+  </table>
+  <p>
+	 <div id="navigator" class="center">
+		 <th:block th:if="${nav.currentPage - nav.pagePerGroup > 0}">
+		 <a th:href="@{/board/list(page=${nav.currentPage - nav.pagePerGroup}, searchText=${searchText})}"  class="a1"><<</a>&nbsp;&nbsp;	
+		 </th:block>
+		 
+		 <th:block th:if="${nav.currentPage - 1 > 0}">
+		 <a th:href="@{/board/list(page=${nav.currentPage - 1}, searchText=${searchText})}" class="a1"><</a>&nbsp;&nbsp;			
+		 </th:block>
+		 
+		 <th:block th:if="${nav.endPageGroup != 0}">
+			 <!-- startPageGroup 부터 endPageGroup까지 숫자를 표시해줌 -->
+			 <th:block th:each="counter : ${#numbers.sequence(nav.startPageGroup, nav.endPageGroup)}"> 
+				 <a th:href="@{/board/list(page=${counter}, searchText=${searchText})}" th:text="${counter}" class="a1"/>&nbsp;
+			 </th:block>
+		 </th:block>
+		 
+		 <th:block th:if="${nav.currentPage < nav.totalPageCount}">
+		 <a th:href="@{/board/list(page=${nav.currentPage + 1}, searchText=${searchText})}" class="a1">></a>
+	 	</th:block>
+	 	
+	 	<th:block th:if="${(nav.currentPage + nav.pagePerGroup) <= nav.totalPageCount}">
+	 	<a th:href="@{/board/list(page=${nav.currentPage + nav.pagePerGroup}, searchText=${searchText})}" class="a1">>></a>&nbsp;&nbsp;	
+	 	</th:block>
+	 	
+	 </div>
+  <div class="center" style="margin-top:15px;">
+    <input type="button" onclick="location.href='/'" value="메인으로">
+    <input type="button" onclick="location.href='/board/write'" value="글쓰기">
+  </div>
+</div>
+</body>
+</html>
